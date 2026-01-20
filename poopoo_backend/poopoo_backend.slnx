@@ -1,0 +1,12 @@
+<Solution>
+  <Folder Name="/poopoo_frontend/">
+    <File Path="../poopoo_frontend/.gitignore" />
+    <File Path="../poopoo_frontend/app.json" />
+    <File Path="../poopoo_frontend/eslint.config.js" />
+    <File Path="../poopoo_frontend/package-lock.json" />
+    <File Path="../poopoo_frontend/package.json" />
+    <File Path="../poopoo_frontend/README.md" />
+    <File Path="../poopoo_frontend/tsconfig.json" />
+  </Folder>
+  <Project Path="poopoo_backend.csproj" />
+</Solution>
