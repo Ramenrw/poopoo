@@ -37,3 +37,32 @@ fetch('https://localhost:7134/analyze', {
 	console.log(data);
 });
 ```
+
+The response could look something like this:
+
+(for reference, the dto looks like this)
+```csharp
+public record AnalyzeResponse(
+        string[] DetectedItems, // items model was able to detect
+        string[] UnsureItems, // items model was unsure about
+        string[] MealIdeas, // the ideas
+        string? Disclaimer = null, // disclaimer about accuracy
+        string[]? Questions = null // for the user to answer.
+    );
+```
+(the json response the frontend will use)
+```json
+{
+	"detectedItems": ["apple", "banana", "carrot"],
+	"unsureItems": ["mango"],
+	"mealIdeas": [
+		"Fruit Salad with Apple, Banana, and Carrot",
+		"Smoothie with Apple and Banana"
+	],
+	"disclaimer": "This analysis is based on image recognition and may not be 100% accurate.",
+	"questions": [
+		"Do you have any dietary restrictions?",
+		"Are you allergic to any foods?"
+	]
+}
+```
