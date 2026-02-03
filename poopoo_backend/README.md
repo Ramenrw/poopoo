@@ -60,8 +60,6 @@ API returns a JWT token
 Frontend stores token (memory / secure storage.  idk what the mobile equivalent is................)
 
 Frontend sends token on future requests:
-> you normally do.  for this project, its ok.  (though you can just do it for practice. in the header, its just "Authentication: Bearer <token>")
-
 Authorization: Bearer <token>
 
 ## POST /api/users/login
