@@ -40,7 +40,11 @@ namespace poopoo_backend.Infrastructure.Gemini
                     {
                         parts = new object[]
                         {
-                            new { inline_data = new { mime_type = mimeType, data = base64Image } },
+                            new
+                            {
+                                inline_data = new { mime_type = mimeType, data = base64Image },
+                                media_resolution = new { level = "media_resolution_high" },
+                            },
                             new
                             {
                                 text = string.Format(

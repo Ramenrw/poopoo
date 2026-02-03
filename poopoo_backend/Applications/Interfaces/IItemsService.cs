@@ -5,7 +5,7 @@ namespace poopoo_backend.Applications.Interfaces
 {
     public interface IItemsService
     {
-        Task<Result> UpdateUserItemsAsync(Guid userId, IFormFile image);
+        Task<Result> UpdateUserItemsAsync(Guid userId, IFormFile image, CancellationToken ct);
         Task<Result> UpdateUserExpiryDates(Guid userId);
         Task<Result> ManuallyEnterItemAsync(Guid userId, string itemName, DateTime? expiryDate);
         Task<Result> ManuallyRemoveItemAsync(Guid userId, Guid itemId);

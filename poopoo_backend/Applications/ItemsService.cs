@@ -1,5 +1,6 @@
 ﻿using poopoo_backend.Applications.Interfaces;
 using poopoo_backend.Domain.Items;
+using poopoo_backend.Infrastructure.Gemini;
 using poopoo_backend.Repositories.Interfaces;
 using poopoo_backend.Shared.Results;
 
@@ -8,10 +9,12 @@ namespace poopoo_backend.Applications
     public class ItemsService : IItemsService
     {
         private readonly IItemRepository _itemRepo;
+        private readonly GeminiClient _gemini;
 
-        public ItemsService(IItemRepository itemRepo)
+        public ItemsService(IItemRepository itemRepo, GeminiClient gemini)
         {
             _itemRepo = itemRepo;
+            _gemini = gemini;
         }
 
         public async Task<IReadOnlyCollection<Item>> GetUserItems(Guid userId)
@@ -59,9 +62,43 @@ namespace poopoo_backend.Applications
             return new Result(true);
         }
 
-        public Task<Result> UpdateUserItemsAsync(Guid userId, IFormFile image)
+        public async Task<Result> UpdateUserItemsAsync(
+            Guid userId,
+            IFormFile image,
+            CancellationToken ct = default
+        )
         {
-            throw new NotImplementedException();
+            if (image.Length > 5_000_000)
+                return new Result(false, FailureReason.ValidationFailed);
+
+            await using var stream = image.OpenReadStream();
+
+            var res = await _gemini.UploadImageAsync(stream, image.ContentType, ct);
+
+            var detectedItems = res.Data;
+            if (detectedItems == null || detectedItems.Length == 0)
+            {
+                return new Result(false, FailureReason.NotFound);
+            }
+
+            foreach (DetectedItemDto i in detectedItems)
+            {
+                await _itemRepo.AddAsync(
+                    new Item()
+                    {
+                        Id = Guid.NewGuid(),
+                        UserId = userId,
+                        Name = i.Name,
+                        Category = i.Category,
+                        Quantity = i.Quantity,
+                        DetectedConfidence = i.DetectedConfidence,
+                        ExpirationDate = i.ExpirationDate,
+                        RecordedAt = DateTime.UtcNow,
+                    }
+                );
+            }
+
+            return new Result(true);
         }
     }
 }
