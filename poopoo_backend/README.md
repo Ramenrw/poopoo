@@ -33,6 +33,12 @@ POST   /api/items/update-expiry
 POST   /api/items/upload-image
 ```
 
+SAMPLE USER:
+```
+email: sharon@waterloo.com
+password: ilovenewjeans
+```
+
 Read on for more information.  Also note: i am doing this sleep deprived (even though its like 9pm), so to be EXTRA sure, just doublecheck all the Controllers files.  This is the entry point for the routes (then you can trace if you like).
 
 ## Users & Authentication API
@@ -112,6 +118,7 @@ User profile creation
 Token issuance
 
 ### Request Body
+```
 {
   "email": "sharon@waterloo.com",
   "password": "ilovenewjeans",
@@ -121,11 +128,14 @@ Token issuance
   "goals": ["High protein", "Muscle gain"],
   "restrictions": ["Peanuts"]
 }
+```
 
 ### Success Response (200 OK)
+```
 {
   "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
 }
+```
 
 ## Error Responses
 ### 400 Bad Request	
