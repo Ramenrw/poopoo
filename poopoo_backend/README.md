@@ -122,13 +122,15 @@ Token issuance
 {
   "email": "sharon@waterloo.com",
   "password": "ilovenewjeans",
+  "displayName": "sharon",
 
-  "preferredCuisines": ["Korean", "Japanese"],
+  "preferredCuisines": ["Korean", "Filipino"],
   "groceryStoreFrequencyPerWeek": 2,
   "goals": ["High protein", "Muscle gain"],
   "restrictions": ["Peanuts"]
 }
 ```
+> note: displayName is optional.  will default to email
 
 ### Success Response (200 OK)
 ```
