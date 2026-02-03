@@ -1,6 +1,7 @@
-﻿using poopoo_backend.Domain.Users;
+﻿using System.Collections.Concurrent;
+using poopoo_backend.Domain.Users;
 using poopoo_backend.Repositories.Interfaces;
-using System.Collections.Concurrent;
+using poopoo_backend.Shared.Results;
 
 namespace poopoo_backend.Repositories
 {
@@ -14,19 +15,19 @@ namespace poopoo_backend.Repositories
             return Task.FromResult(user);
         }
 
-        public Task AddUserAsync(User user)
+        public Task<Result> AddUserAsync(User user)
         {
             if (user.Id == Guid.Empty)
                 user.Id = Guid.NewGuid();
 
             _users[user.Id] = user;
-            return Task.CompletedTask;
+            return Task.FromResult(new Result(true));
         }
 
-        public Task DeleteUserAsync(Guid userId)
+        public Task<Result> DeleteUserAsync(Guid userId)
         {
             _users.TryRemove(userId, out _);
-            return Task.CompletedTask;
+            return Task.FromResult(new Result(true));
         }
     }
 }

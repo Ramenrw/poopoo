@@ -1,5 +1,6 @@
 ﻿using poopoo_backend.Applications.Interfaces;
 using poopoo_backend.Auth;
+using poopoo_backend.Domain.Users;
 using poopoo_backend.Repositories.Interfaces;
 using poopoo_backend.Shared.DTOs;
 using poopoo_backend.Shared.Results;
@@ -15,9 +16,19 @@ namespace poopoo_backend.Applications
             _userRepository = userRepository;
         }
 
-        public Task<Result> CreateUserProfileAsync(Guid authId, RegisterDto registerDto)
+        public async Task<Result> CreateUserProfileAsync(Guid authId, RegisterDto registerDto)
         {
-            throw new NotImplementedException();
+            var userProfile = new User
+            {
+                Id = authId,
+                Email = registerDto.Email,
+                DisplayName = registerDto.DisplayName ?? registerDto.Email,
+                PreferredCuisines = registerDto.PreferredCuisines,
+                GroceryStoreFrequencyPerWeek = registerDto.GroceryStoreFrequencyPerWeek,
+                Goals = registerDto.Goals,
+                Restrictions = registerDto.Restrictions,
+            };
+            return await _userRepository.AddUserAsync(userProfile);
         }
 
         public Task<Result> UpdateUserPreferences(Guid userId, UserPreferencesDTO preferences)

@@ -4,12 +4,20 @@ using poopoo_backend;
 using poopoo_backend.Applications;
 using poopoo_backend.Applications.Interfaces;
 using poopoo_backend.Auth;
+using poopoo_backend.Repositories;
+using poopoo_backend.Repositories.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddSingleton<InMemoryIdentityStore>();
 builder.Services.AddScoped<IAuthService, InMemoryAuthService>();
 builder.Services.AddScoped<IUsersService, UsersService>();
+builder.Services.AddScoped<IItemsService, ItemsService>();
+builder.Services.AddScoped<IRecipesService, RecipesService>();
+
+builder.Services.AddSingleton<IItemRepository, InMemoryItemRepository>();
+builder.Services.AddSingleton<IUserRepository, InMemoryUserRepository>();
+builder.Services.AddSingleton<IRecipeRepository, InMemoryRecipeRepository>();
 
 builder
     .Services.AddAuthentication("Bearer")
