@@ -6,7 +6,7 @@ namespace poopoo_backend.Applications.Interfaces
 {
     public interface IRecipesService
     {
-        Task<IReadOnlyCollection<Recipe>> GenerateRecipesForUser(Guid userId);
+        Task<Result<IReadOnlyCollection<Recipe>>> GenerateRecipesForUser(Guid userId);
         Task<IReadOnlyCollection<Recipe>> GetSavedRecipesForUser(Guid userId);
         Task<Result> SaveRecipeForUser(Guid userId, RecipeDTO recipe);
         Task<Result> RemoveSavedRecipeForUser(Guid userId, Guid recipeId);

@@ -31,9 +31,25 @@ namespace poopoo_backend.Applications
             return await _userRepository.AddUserAsync(userProfile);
         }
 
-        public Task<Result> UpdateUserPreferences(Guid userId, UserPreferencesDTO preferences)
+        public async Task<User?> GetUserProfileAsync(Guid userId)
         {
-            throw new NotImplementedException();
+            return await _userRepository.GetUserAsync(userId);
+        }
+
+        public async Task<Result> UpdateUserPreferences(Guid userId, UserPreferencesDTO preferences)
+        {
+            var res = await _userRepository.GetUserAsync(userId);
+            if (res is null)
+            {
+                return new Result(false, FailureReason.NotFound);
+            }
+            res.UpdatePreferences(
+                preferences.PreferredCuisines,
+                preferences.Goals,
+                preferences.GroceryStoreFrequencyPerWeek,
+                preferences.Restrictions
+            );
+            return await _userRepository.AddUserAsync(res);
         }
     }
 }
