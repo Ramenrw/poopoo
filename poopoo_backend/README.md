@@ -1,4 +1,10 @@
 ﻿# How to run
+## BEFORE YOU START
+1. Copy the `appsettings.Example.json` and rename to `appsettings.Development.json`.  If for some reason this is going public/into production, copy into `appsettings.Production.json`
+2. Replace the API key with the actual one (from discord or notion)
+
+If you do not do that, calls to gemini will not work.
+
 ## With Visual Studio
 Click the "Run" button or press F5 to start the application.
 
