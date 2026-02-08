@@ -54,7 +54,7 @@ export default function Restrictions({ selected, onChange, onNext, onBack }: Pro
 
 const styles = StyleSheet.create({
   list: {
-    gap: 14,
+    gap: 20,
     paddingTop: 6,
     paddingBottom: 20,
   },

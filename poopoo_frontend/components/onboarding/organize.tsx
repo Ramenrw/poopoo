@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.bg,
     paddingHorizontal: UI.screenPaddingX,
     paddingTop: UI.topPadding,
-    paddingBottom: 28,
+    paddingBottom: 50,
   },
   center: {
     flex: 1,
@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
   },
   pillText: {
     fontFamily: FONTS.body,
-    fontSize: 20,
+    fontSize: 14,
     color: COLORS.white,
   },
 });

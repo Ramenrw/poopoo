@@ -23,7 +23,7 @@ export default function OptionPill({ label, selected, onPress }: Props) {
 const styles = StyleSheet.create({
   pill: {
     borderRadius: 16,
-    paddingVertical: 14,
+    paddingVertical: 25,
     paddingHorizontal: 16,
     borderWidth: 1,
     borderColor: COLORS.border,
@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontFamily: FONTS.body,
-    fontSize: SIZES.body,
+    fontSize: 15,
   },
   textUnselected: {
     color: COLORS.subtext,

@@ -41,18 +41,22 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.bg,
     paddingHorizontal: UI.screenPaddingX,
     paddingTop: UI.topPadding,
-    paddingBottom: 28,
+    paddingBottom: 50,
   },
-  back: {
-    width: 44,
-    height: 44,
-    justifyContent: "center",
-  },
+  back: { 
+    width: 58, 
+    height: 58, 
+    justifyContent: "center" 
+},
+  backPlaceholder: { 
+    width: 58, 
+    height: 58  
+},
   backText: {
-    fontSize: 34,
-    lineHeight: 34,
-    color: COLORS.text,
-  },
+     fontSize: 55, 
+     lineHeight: 55, 
+     color: COLORS.text 
+    },
   center: {
     flex: 1,
     alignItems: "center",

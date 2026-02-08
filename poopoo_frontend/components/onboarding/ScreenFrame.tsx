@@ -43,12 +43,12 @@ const styles = StyleSheet.create({
   },
   topRow: {
     paddingHorizontal: UI.screenPaddingX,
-    height: 52,
+    height: 78,
     justifyContent: "center",
   },
-  back: { width: 44, height: 44, justifyContent: "center" },
-  backPlaceholder: { width: 44, height: 44 },
-  backText: { fontSize: 34, lineHeight: 34, color: COLORS.text },
+  back: { width: 58, height: 58, justifyContent: "center" },
+  backPlaceholder: { width: 58, height: 58  },
+  backText: { fontSize: 55, lineHeight: 55, color: COLORS.text },
 
   header: {
     paddingHorizontal: UI.screenPaddingX,
@@ -76,6 +76,7 @@ const styles = StyleSheet.create({
   bottom: {
     paddingHorizontal: UI.screenPaddingX,
     paddingBottom: 28,
+    marginTop: 60,
     alignItems: "center",
   },
 });

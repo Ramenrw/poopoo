@@ -48,7 +48,7 @@ export default function Goals({ selected, onChange, onNext, onBack }: Props) {
 
 const styles = StyleSheet.create({
   list: {
-    gap: 14,
+    gap: 20,
     paddingTop: 6,
     paddingBottom: 20,
   },
