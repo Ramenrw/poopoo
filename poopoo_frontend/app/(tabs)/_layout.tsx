@@ -1,10 +1,19 @@
 import { Tabs } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
+import { useFonts, Inter_400Regular } from "@expo-google-fonts/inter";
+import { Poppins_600SemiBold } from '@expo-google-fonts/poppins';
 
 const PRIMARY = "#84BFFA";
 const INACTIVE = "#000000";
 
-export default function TabsLayout() {
+export default function App() {
+  const [fontsLoaded] = useFonts({
+    Inter_400Regular,
+    Poppins_600SemiBold,
+  });
+    if (!fontsLoaded) {
+        return null;
+    }
   return (
     <Tabs
       screenOptions={{
@@ -13,17 +22,17 @@ export default function TabsLayout() {
         tabBarInactiveTintColor: INACTIVE,
       }}
     >
-      {/* Profile (leftmost) */}
+        
+      {/* Home (rightmost) */}
       <Tabs.Screen
-        name="profile"
+        name="home"
         options={{
-          title: "Profile",
+          title: "Home",
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="person-outline" size={size} color={color} />
+            <Ionicons name="home-outline" size={size} color={color} />
           ),
         }}
       />
-
       <Tabs.Screen
         name="calendar"
         options={{
@@ -54,14 +63,13 @@ export default function TabsLayout() {
           ),
         }}
       />
-
-      {/* Home (rightmost) */}
+      {/* Profile (leftmost) */}
       <Tabs.Screen
-        name="home"
+        name="profile"
         options={{
-          title: "Home",
+          title: "Profile",
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="home-outline" size={size} color={color} />
+            <Ionicons name="person-outline" size={size} color={color} />
           ),
         }}
       />

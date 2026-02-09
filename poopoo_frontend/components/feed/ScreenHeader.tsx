@@ -14,8 +14,13 @@ export default function ScreenHeader({ title }: { title: string }) {
 }
 
 const styles = StyleSheet.create({
-  row: { flexDirection: "row", alignItems: "center", gap: 8 },
+  row: { 
+    flexDirection: "row", 
+    alignItems: "center", 
+    gap: 8,
+    marginBottom: 8,  // Add this to reduce space below header
+  },
   back: { width: 56, height: 56, justifyContent: "center" },
   backText: { fontSize: 42, lineHeight: 42 },
-  title: { fontSize: 22, fontWeight: "700" },
+  title: { fontSize: 22, fontWeight: "700", paddingTop: 40, textAlign: "center", flex: 1 },
 });

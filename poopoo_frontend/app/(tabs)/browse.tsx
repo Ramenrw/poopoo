@@ -21,21 +21,23 @@ export default function Browse() {
     <View style={styles.container}>
       <SearchBar value={query} onChange={setQuery} />
 
-      {/* Top horizontal thumbnails (optional placeholder) */}
-    <ScrollView horizontal showsHorizontalScrollIndicator style={{ marginTop: 10 }}>
-    <View style={{ width: 16 }} />
-    <Image source={require("../../assets/images/feed/browse-1.png")} style={styles.banner} />
-    <Image source={require("../../assets/images/feed/browse-2.png")} style={styles.banner} />
-    <Image source={require("../../assets/images/feed/browse-3.png")} style={styles.banner} />
-    <View style={{ width: 16 }} />
-    </ScrollView>
-
+      {/* Banner images - tight spacing */}
+      <ScrollView 
+        horizontal 
+        showsHorizontalScrollIndicator={false} 
+        style={styles.bannerScroll}
+        contentContainerStyle={{ paddingHorizontal: 16 }}
+      >
+        <Image source={require("../../assets/images/feed/browse-1.png")} style={styles.banner} />
+        <Image source={require("../../assets/images/feed/browse-2.png")} style={styles.banner} />
+        <Image source={require("../../assets/images/feed/browse-3.png")} style={styles.banner} />
+      </ScrollView>
 
       <CategoryTabs categories={CATEGORIES} active={category} onChange={setCategory} />
 
       <ScrollView
-        style={{ flex: 1 }}
-        showsVerticalScrollIndicator
+        style={styles.recipeScroll}
+        showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingBottom: 24 }}
       >
         {filtered.map((r) => (
@@ -49,19 +51,24 @@ export default function Browse() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#fff", paddingTop: 100 },
-  thumbBox: {
+  container: { 
+    flex: 1, 
+    backgroundColor: "#fff", 
+    paddingTop: 60
+  },
+  bannerScroll: {
+    marginTop: 12,
+    flexGrow: 0,  // Important: prevents extra space
+  },
+  banner: {
     width: 160,
     height: 100,
     borderRadius: 14,
-    backgroundColor: "#EEE",
     marginRight: 12,
+    backgroundColor: "#EEE",
   },
-  banner: {
-  width: 160,
-  height: 100,
-  borderRadius: 14,
-  marginRight: 12,
-  backgroundColor: "#EEE",
-},
+  recipeScroll: {
+    flex: 1,
+    marginTop: 12,
+  }
 });

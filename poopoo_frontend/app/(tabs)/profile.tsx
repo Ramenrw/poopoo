@@ -17,7 +17,7 @@ export default function Profile() {
       <Text style={styles.name}>Sharon</Text>
 
     <View style={styles.card}>
-        <Row label="Dietary Restrictions" href="/fridge" icon="restaurant-outline" />
+        <Row label="Dietary Restrictions" href="/restrictions" icon="restaurant-outline" />
         <Row label="My favourite recipes" href="/favourites" icon="heart-outline" />
         <Row label="My goals" href="/goals" icon="eye-outline" />
         <Row label="My fridge" href="/fridge" icon="document-text-outline" />
@@ -37,7 +37,7 @@ function Row({
   icon,
 }: {
   label: string;
-  href: "/fridge" | "/favourites" | "/goals";
+  href: "/restrictions" | "/fridge" | "/favourites" | "/goals";
   icon: keyof typeof Ionicons.glyphMap;
 }) {
   return (

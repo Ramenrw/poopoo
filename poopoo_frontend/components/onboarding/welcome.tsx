@@ -1,11 +1,24 @@
+import { useEffect } from "react";
 import { View, Text, Image, StyleSheet } from "react-native";
+import { router } from "expo-router";
 import { COLORS, FONTS } from "./styles";
 
 interface Props {
-  onFinish: () => void; // keep for later even if screen is tap-only
+  onFinish?: () => void; // optional
 }
 
-export default function Welcome({}: Props) {
+export default function Welcome({ onFinish }: Props) {
+  useEffect(() => {
+    const t = setTimeout(() => {
+      // Prefer routing to feed for dev preview:
+      router.replace("/(tabs)/home");
+      // If you want onboarding flow instead later:
+      // onFinish?.();
+    }, 900);
+
+    return () => clearTimeout(t);
+  }, [onFinish]);
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>
