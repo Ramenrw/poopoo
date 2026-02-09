@@ -11,17 +11,33 @@ namespace poopoo_backend.Applications
     {
         private readonly GeminiClient _geminiClient;
         private readonly IRecipeRepository _recipeRepository;
+        private readonly ILogger<RecipesService> _logger;
+        private readonly IUserRepository _userRepository;
+        private readonly IItemRepository _itemsRepository;
 
-        public RecipesService(GeminiClient geminiClient, IRecipeRepository recipeRepository)
+        public RecipesService(
+            GeminiClient geminiClient,
+            IRecipeRepository recipeRepository,
+            ILogger<RecipesService> logger,
+            IUserRepository userRepository,
+            IItemRepository itemsRepository
+        )
         {
             _geminiClient = geminiClient;
             _recipeRepository = recipeRepository;
+            _logger = logger;
+            _userRepository = userRepository;
+            _itemsRepository = itemsRepository;
         }
 
         public async Task<Result<IReadOnlyCollection<Recipe>>> GenerateRecipesForUser(Guid userId)
         {
+            _logger.LogInformation("RECIPES START userId={UserId}", userId);
             // 1. Generate recipes via Gemini
-            var result = await _geminiClient.GenerateRecipesForUserAsync(userId);
+            _logger.LogInformation("RECIPES: calling Gemini");
+            var user = await _userRepository.GetUserAsync(userId);
+            var items = await _itemsRepository.GetByUserAsync(userId);
+            var result = await _geminiClient.GenerateRecipesForUserAsync(user, items);
             if (!result.Success)
                 return new Result<IReadOnlyCollection<Recipe>>(false, null, result.Failure);
 
@@ -29,6 +45,7 @@ namespace poopoo_backend.Applications
                 return new Result<IReadOnlyCollection<Recipe>>(true, Array.Empty<Recipe>());
 
             // 2. Map DTOs → domain
+            _logger.LogInformation("RECIPES: mapping {Count} recipes", result.Data.Length);
             var recipes = result.Data.Select(dto => MapToDomain(userId, dto)).ToList();
 
             // 3. Persist

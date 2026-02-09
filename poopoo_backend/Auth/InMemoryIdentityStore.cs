@@ -17,7 +17,7 @@ namespace poopoo_backend.Auth
             {
                 Id = Guid.NewGuid(),
                 Email = email,
-                PasswordHash = BCrypt.Net.BCrypt.HashPassword(password),
+                PasswordHash = BCrypt.Net.BCrypt.EnhancedHashPassword(password, workFactor: 4),
             };
 
             if (!_usersByEmail.TryAdd(email, user))

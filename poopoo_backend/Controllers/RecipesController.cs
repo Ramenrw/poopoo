@@ -6,17 +6,19 @@ using poopoo_backend.Shared.DTOs;
 
 namespace poopoo_backend.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class RecipesController : ControllerBase
     {
         private readonly IRecipesService _recipesService;
+        private readonly ILogger<RecipesController> _logger;
         private Guid CurrentUserId => Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
 
-        public RecipesController(IRecipesService recipesService)
+        public RecipesController(IRecipesService recipesService, ILogger<RecipesController> logger)
         {
             _recipesService = recipesService;
+            _logger = logger;
         }
 
         [HttpGet]
@@ -48,11 +50,28 @@ namespace poopoo_backend.Controllers
             return Ok();
         }
 
-        [HttpGet("generate")]
+        [HttpPost("generate")]
         public async Task<IActionResult> GenerateRecipesForUser()
         {
-            var recipes = await _recipesService.GenerateRecipesForUser(CurrentUserId);
+            _logger.LogInformation(
+                "ENTER generate. Authenticated={Auth}",
+                User.Identity?.IsAuthenticated
+            );
+            var userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            _logger.LogInformation("Claim nameid={Claim}", userIdClaim);
+            var recipes = await _recipesService.GenerateRecipesForUser(Guid.Parse(userIdClaim!));
+
+            _logger.LogInformation(
+                "EXIT generate. Count={Count}",
+                recipes.Success ? recipes.Data?.Count : -1
+            );
             return Ok(recipes);
+        }
+
+        [HttpGet("ok")]
+        public async Task<IActionResult> CloudrunTest()
+        {
+            return Ok();
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging.Abstractions;
 using poopoo_backend.Applications.Fakes;
 using poopoo_backend.Domain.Items;
 using poopoo_backend.Domain.Users;
@@ -33,7 +34,7 @@ public class GeminiClientIntegrationTests
 
         var httpClient = new HttpClient();
 
-        var geminiClient = new GeminiClient(httpClient, config, usersService, itemsService);
+        var geminiClient = new GeminiClient(httpClient, config, NullLogger<GeminiClient>.Instance);
 
         var imagePath = Path.Combine(AppContext.BaseDirectory, "Images", "pic1.jpg");
         await using var imageStream = File.OpenRead(imagePath);

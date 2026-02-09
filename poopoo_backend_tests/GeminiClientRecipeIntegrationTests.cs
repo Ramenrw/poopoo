@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging.Abstractions;
 using poopoo_backend.Applications.Fakes;
 using poopoo_backend.Domain.Items;
 using poopoo_backend.Domain.Users;
@@ -45,13 +46,18 @@ namespace poopoo_backend_tests
 
             var usersService = new FakeUsersService(user);
             var itemsService = new FakeItemsService(items);
-
+            //var user = await usersService.GetUserProfileAsync(userId);
+            //var items = await itemsService.GetUserItems(userId);
             var httpClient = new HttpClient();
 
-            var geminiClient = new GeminiClient(httpClient, config, usersService, itemsService);
+            var geminiClient = new GeminiClient(
+                httpClient,
+                config,
+                NullLogger<GeminiClient>.Instance
+            );
 
             // Act
-            var result = await geminiClient.GenerateRecipesForUserAsync(userId);
+            var result = await geminiClient.GenerateRecipesForUserAsync(user, items);
 
             // Assert
             Assert.True(result.Success);

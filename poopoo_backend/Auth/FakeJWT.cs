@@ -7,16 +7,12 @@ namespace poopoo_backend.Auth
 {
     public static class FakeJwt
     {
-        private static readonly byte[] Key = Encoding.UTF8.GetBytes(
-            "SUPER_SECRET_KEY_THAT_WE_WILL_TOTALLY_USE_PLEASE_DONT_STEAL123"
-        );
-
-        public static string CreateToken(Guid userId)
+        public static string CreateToken(Guid userId, string key)
         {
             var claims = new[] { new Claim(ClaimTypes.NameIdentifier, userId.ToString()) };
 
             var creds = new SigningCredentials(
-                new SymmetricSecurityKey(Key),
+                new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key)),
                 SecurityAlgorithms.HmacSha256
             );
 

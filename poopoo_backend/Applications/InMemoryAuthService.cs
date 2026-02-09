@@ -32,7 +32,7 @@ namespace poopoo_backend.Applications
                     new Result<Guid>(false, Guid.Empty, FailureReason.InvalidState)
                 );
 
-            if (!BCrypt.Net.BCrypt.Verify(password, user.PasswordHash))
+            if (!BCrypt.Net.BCrypt.EnhancedVerify(password, user.PasswordHash))
                 return Task.FromResult(
                     new Result<Guid>(false, Guid.Empty, FailureReason.InvalidState)
                 );

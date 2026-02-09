@@ -19,25 +19,20 @@ builder.Services.AddScoped<IRecipesService, RecipesService>();
 builder.Services.AddSingleton<IItemRepository, InMemoryItemRepository>();
 builder.Services.AddSingleton<IUserRepository, InMemoryUserRepository>();
 builder.Services.AddSingleton<IRecipeRepository, InMemoryRecipeRepository>();
-
-builder.Services.AddScoped<GeminiClient>();
-
+var jwtKey = builder.Configuration["Jwt:Key"];
 builder
     .Services.AddAuthentication("Bearer")
     .AddJwtBearer(
         "Bearer",
         options =>
         {
+            options.RequireHttpsMetadata = false;
             options.TokenValidationParameters = new()
             {
                 ValidateIssuer = false,
                 ValidateAudience = false,
                 ValidateIssuerSigningKey = true,
-                IssuerSigningKey = new SymmetricSecurityKey(
-                    Encoding.UTF8.GetBytes(
-                        "SUPER_SECRET_KEY_THAT_WE_WILL_TOTALLY_USE_PLEASE_DONT_STEAL123"
-                    )
-                ),
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey!)),
                 ValidateLifetime = true,
             };
         }
@@ -45,7 +40,10 @@ builder
 
 builder.Services.AddAuthorization();
 
-// Add services to the container.
+builder.Services.AddHttpClient<GeminiClient>(client =>
+{
+    client.Timeout = TimeSpan.FromSeconds(60);
+});
 
 builder.Services.AddControllers();
 
@@ -54,28 +52,68 @@ builder.Services.AddOpenApi();
 
 var app = builder.Build();
 
-// 🔽 SEED HERE
-using (var scope = app.Services.CreateScope())
+//using (var scope = app.Services.CreateScope())
+//{
+//    var store = scope.ServiceProvider.GetRequiredService<InMemoryIdentityStore>();
+//    var userService = scope.ServiceProvider.GetRequiredService<IUsersService>();
+//    // Avoid duplicates on hot reload
+//    if (!store.EmailExists("sharon@waterloo.com"))
+//    {
+//        var identity = store.Create("sharon@waterloo.com", "ilovenewjeans");
+
+//        var registerDto = new RegisterDto
+//        {
+//            Email = "sharon@waterloo.com",
+//            PreferredCuisines = new[] { "Chinese", "Filipino" },
+//            GroceryStoreFrequencyPerWeek = 2,
+//            Goals = new[] { "High protein", "Muscle gain" },
+//            Restrictions = Array.Empty<string>(),
+//        };
+
+//        await userService.CreateUserProfileAsync(identity.Id, registerDto);
+//    }
+//}
+
+_ = Task.Run(async () =>
 {
-    var store = scope.ServiceProvider.GetRequiredService<InMemoryIdentityStore>();
-    var userService = scope.ServiceProvider.GetRequiredService<UsersService>();
-    // Avoid duplicates on hot reload
-    if (store.EmailExists("sharon@waterloo.com"))
-        return;
-
-    var identity = store.Create("sharon@waterloo.com", "ilovenewjeans");
-
-    var registerDto = new RegisterDto
+    try
     {
-        Email = "sharon@waterloo.com",
-        PreferredCuisines = new[] { "Chinese", "Filipino" },
-        GroceryStoreFrequencyPerWeek = 2,
-        Goals = new[] { "High protein", "Muscle gain" },
-        Restrictions = Array.Empty<string>(),
-    };
+        // Use CreateAsyncScope for better thread handling
+        using var scope = app.Services.CreateAsyncScope();
+        var store = scope.ServiceProvider.GetRequiredService<InMemoryIdentityStore>();
+        var userService = scope.ServiceProvider.GetRequiredService<IUsersService>();
+        var itemsService = scope.ServiceProvider.GetRequiredService<IItemsService>();
 
-    await userService.CreateUserProfileAsync(identity.Id, registerDto);
-}
+        if (!store.EmailExists("sharon@waterloo.com"))
+        {
+            var identity = store.Create("sharon@waterloo.com", "ilovenewjeans");
+            // This can now take 10 seconds or 10 minutes without hanging the /ok route
+            var registerDto = new RegisterDto
+            {
+                Email = "sharon@waterloo.com",
+                PreferredCuisines = new[] { "Chinese", "Filipino" },
+                GroceryStoreFrequencyPerWeek = 2,
+                Goals = new[] { "High protein", "Muscle gain" },
+                Restrictions = Array.Empty<string>(),
+            };
+            await userService.CreateUserProfileAsync(identity.Id, registerDto);
+            await itemsService.ManuallyEnterItemAsync(identity.Id, "Chicken Breast", null);
+            await itemsService.ManuallyEnterItemAsync(identity.Id, "Garlic", null);
+            await itemsService.ManuallyEnterItemAsync(identity.Id, "Ginger", null);
+            await itemsService.ManuallyEnterItemAsync(identity.Id, "Soy Sauce", null);
+
+            await itemsService.ManuallyEnterItemAsync(identity.Id, "Bok Choy", null);
+            await itemsService.ManuallyEnterItemAsync(identity.Id, "Broccoli", null);
+
+            await itemsService.ManuallyEnterItemAsync(identity.Id, "White Rice", null);
+        }
+    }
+    catch (Exception ex)
+    {
+        // Check logs for this!
+        Console.WriteLine($"Startup Seeding Failed: {ex.Message}");
+    }
+});
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -83,7 +121,7 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();

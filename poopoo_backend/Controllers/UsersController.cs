@@ -21,11 +21,20 @@ namespace poopoo_backend.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginDto dto)
         {
-            var result = await _authService.LoginAsync(dto.Email, dto.Password);
+            var config = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json", optional: true)
+                .AddJsonFile("appsettings.Development.json", optional: true)
+                .AddEnvironmentVariables()
+                .Build();
+            var jwtKey = config["Jwt:Key"];
+            var result = await _authService
+                .LoginAsync(dto.Email, dto.Password)
+                .ConfigureAwait(false);
+            ;
             if (!result.Success)
                 return Unauthorized();
 
-            var token = FakeJwt.CreateToken(result.Data);
+            var token = FakeJwt.CreateToken(result.Data, jwtKey);
             return Ok(new { token });
         }
 
@@ -39,9 +48,14 @@ namespace poopoo_backend.Controllers
             var profileResult = await _usersService.CreateUserProfileAsync(result.Data, dto);
             if (!profileResult.Success)
                 return Problem("Failed to create user profile");
-
+            var config = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json", optional: true)
+                .AddJsonFile("appsettings.Development.json", optional: true)
+                .AddEnvironmentVariables()
+                .Build();
+            var jwtKey = config["Jwt:Key"];
             // put the token inside hearder with Bearer schema
-            var token = FakeJwt.CreateToken(result.Data);
+            var token = FakeJwt.CreateToken(result.Data, jwtKey);
             return Ok(new { token });
         }
     }

@@ -3,7 +3,9 @@ import { View, Text, TextInput, Pressable, StyleSheet } from "react-native";
 import ScreenFrame from "./ScreenFrame";
 import NextPill from "./NextPill";
 import { COLORS, FONTS } from "./styles";
-
+import * as SecureStore from "expo-secure-store";
+import { router } from "expo-router";
+const API_BASE = process.env.EXPO_PUBLIC_API_URL!;
 type Mode = "login" | "signup";
 
 interface Props {
@@ -28,13 +30,53 @@ export default function Auth({ onBack, onDone }: Props) {
       ? email.trim().length > 0 && password.trim().length > 0
       : username.trim().length > 0 && email.trim().length > 0 && password.trim().length > 0;
 
+  const handleSubmit = async () => {
+  if (!canSubmit) return;
+
+  if (mode === "login") {
+    try {
+      const res = await fetch(API_BASE+"/api/users/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email,
+          password,
+        }),
+      });
+
+      const data = await res.json();
+
+      console.log("Login result:", data);
+
+      if (!res.ok) {
+        console.error("Login failed");
+        return;
+      }
+
+      // IF GOOD, PUT THINGS IN AUTH STORE
+      // OR I GUESS THIS IS GOOD FOR NOW :3
+      // READ LATER WITH await SecureStore.getItemAsync("auth_token")
+      await SecureStore.setItemAsync("auth_token", data.token);
+      router.replace("/(tabs)/home")
+      } catch (err) {
+        console.error("Login error:", err);
+      }
+    } else {
+      onDone();
+    }
+  };
+
+  
+
   return (
     <ScreenFrame
       title={titleTop}
       onBack={onBack}
       bottom={
         <View style={{ marginBottom: 37 }}>
-            <NextPill label={primaryLabel} disabled={!canSubmit} onPress={onDone} />
+            <NextPill label={primaryLabel} disabled={!canSubmit} onPress={handleSubmit} />
         </View>
         }
     >
