@@ -8,5 +8,6 @@
     <File Path="../poopoo_frontend/README.md" />
     <File Path="../poopoo_frontend/tsconfig.json" />
   </Folder>
+  <Project Path="../poopoo_backend_tests/poopoo_backend_tests.csproj" Id="c417f4e0-7ec7-420f-ae43-5a8d81d4f91f" />
   <Project Path="poopoo_backend.csproj" />
 </Solution>

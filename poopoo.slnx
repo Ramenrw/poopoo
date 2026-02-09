@@ -1,0 +1,20 @@
+<Solution>
+  <Folder Name="/frontend/">
+    <File Path="poopoo_frontend/.gitignore" />
+    <File Path="poopoo_frontend/app.json" />
+    <File Path="poopoo_frontend/eslint.config.js" />
+    <File Path="poopoo_frontend/package-lock.json" />
+    <File Path="poopoo_frontend/package.json" />
+    <File Path="poopoo_frontend/README.md" />
+    <File Path="poopoo_frontend/tsconfig.json" />
+  </Folder>
+  <Folder Name="/frontend/components/">
+    <File Path="poopoo_frontend/components/external-link.tsx" />
+    <File Path="poopoo_frontend/components/haptic-tab.tsx" />
+    <File Path="poopoo_frontend/components/hello-wave.tsx" />
+    <File Path="poopoo_frontend/components/parallax-scroll-view.tsx" />
+    <File Path="poopoo_frontend/components/themed-text.tsx" />
+    <File Path="poopoo_frontend/components/themed-view.tsx" />
+  </Folder>
+  <Project Path="poopoo_backend/poopoo_backend.csproj" />
+</Solution>
