@@ -1,7 +1,7 @@
 # poopoo
 poop
 
-# How to run
+# How to run (locally)
 1. cd to backend
 2. **IMPORTANT** Copy the `.appsettings.Example.json` file, rename it to `.appsettings.Development.json`, then put in the proper api key from the discord/notion.
 3. do `dotnet run` in the console or if using Visual Studio, click the green Http button at the top (after opening the `.sln` file)
@@ -11,9 +11,6 @@ poop
 7. download the expo go app if you haven't
 8. scan qr code
 9. go crazy!!!!!!!!!!!
-
-# IMPORTANT BEFORE YOU START CALLING ROUTES
-PLEASE PLEASE PLEAAAAAAAAAASE attach `Authorization: Bearer <token>` on every endpoint (except register/login one).  
 
 # ROUTES YOU CAN CALL
 ## TL;DR
@@ -34,7 +31,7 @@ POST   /api/items/update-expiry
 POST   /api/items/upload-image
 ```
 
-Read on for more information.  Also note: i am doing this sleep deprived (even though its like 9pm), so to be EXTRA sure, just doublecheck all the Controllers files.  This is the entry point for the routes (then you can trace if you like).
+Read on for more information.
 
 ## Users & Authentication API
 
@@ -46,16 +43,15 @@ https://localhost:7134/api/users
 > Try to use https.  Auth shouldnt even work on http lol.
 
 All authentication uses JWT Bearer tokens.
-(actually, nothing is secured lol.  literally just for getting a user profile made.  its a hackathon.  what are they gonna hack)
+
 
 ## Authentication Flow (TL;DR)
 
 Frontend calls POST /login or POST /register
 API returns a JWT token
-Frontend stores token (memory / secure storage.  idk what the mobile equivalent is................)
+Frontend stores token 
 
 Frontend sends token on future requests:
-> you normally do.  for this project, its ok.  (though you can just do it for practice. in the header, its just "Authentication: Bearer <token>")
 
 Authorization: Bearer <token>
 
