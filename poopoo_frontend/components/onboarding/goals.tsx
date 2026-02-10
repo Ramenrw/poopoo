@@ -2,6 +2,9 @@ import { ScrollView, View, StyleSheet } from "react-native";
 import ScreenFrame from "./ScreenFrame";
 import NextPill from "./NextPill";
 import OptionPill from "./OptionPill";
+import { COLORS, FONTS, SIZES, UI } from "./styles";
+
+
 
 interface Props {
   selected: string[];

@@ -46,8 +46,10 @@ const styles = StyleSheet.create({
   },
   textUnselected: {
     color: COLORS.subtext,
+    fontFamily: FONTS.body,
   },
   textSelected: {
     color: COLORS.white,
+    fontFamily: FONTS.body,
   },
 });

@@ -1,7 +1,9 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { View, Text, ScrollView, StyleSheet, Pressable } from "react-native";
 import ScreenHeader from "../components/feed/ScreenHeader";
 import { router } from "expo-router";
+import * as SecureStore from 'expo-secure-store';
+import { ActivityIndicator } from "react-native";
 
 
 const COLORS = {
@@ -37,6 +39,51 @@ const INITIAL: Record<GroupKey, Item[]> = {
 
 export default function MyFridge() {
   const [data, setData] = useState(INITIAL);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchFridgeItems();
+  }, []);
+
+async function fetchFridgeItems() {
+    try {
+      setLoading(true);
+      const token = await SecureStore.getItemAsync("auth_token");
+      const API_BASE = process.env.EXPO_PUBLIC_API_URL;
+
+      const response = await fetch(`${API_BASE}/api/items`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      if (response.ok) {
+        const items = await response.json();
+        
+        const grouped: Record<GroupKey, Item[]> = {
+          Protein: [],
+          Produce: [],
+          Dairy: [],
+          Other: [],
+        };
+
+        items.forEach((item: any) => {
+          const cat = (item.category || "Other") as GroupKey;
+          if (grouped[cat]) {
+            grouped[cat].push({ id: item.id, label: item.name });
+          } else {
+            grouped["Other"].push({ id: item.id, label: item.name });
+          }
+        });
+
+        setData(grouped);
+      }
+    } catch (error) {
+      console.error("Failed to fetch items:", error);
+    } finally {
+      setLoading(false);
+    }
+  }
 
   function removeItem(group: GroupKey, id: string) {
     setData((prev) => ({
@@ -45,23 +92,34 @@ export default function MyFridge() {
     }));
   }
 
-  // For now + button is UI-only; teammate can wire it later.
+  // Should work?
   function onAdd() {
-    // placeholder
+    router.push("/(tabs)/camera");
+  }
+
+  if (loading) {
+    return (
+      <View style={[styles.container, { justifyContent: 'center' }]}>
+        <ActivityIndicator size="large" color="#000" />
+      </View>
+    );
   }
 
   return (
     <View style={styles.container}>
 
-      <View style={styles.topRow}>
-        <Text style={styles.title}>My fridge</Text>
+     <View style={styles.topRow}>
+        <Pressable onPress={() => router.back()} style={styles.back}>
+            <Text style={styles.backText}>‹</Text>
+        </Pressable>
+  
+    <Text style={styles.title}>My fridge</Text>
 
-        <Pressable style={styles.confirmWrap} onPress={() => router.push("/(tabs)/home" as const)}>
+    <Pressable style={styles.confirmWrap} onPress={() => router.push("/(tabs)/home" as const)}>
         <Text style={styles.confirmText}>Confirm</Text>
         <Text style={styles.chev}>›</Text>
-        </Pressable>
+    </Pressable>
         </View>
-
       <ScrollView showsVerticalScrollIndicator contentContainerStyle={{ paddingBottom: 110 }}>
         <Group
           label="Protein"
@@ -146,10 +204,20 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
   },
+  back: { 
+    width: 58, 
+    height: 58, 
+    justifyContent: "center" 
+  },
+   backText: { 
+    fontSize: 55, 
+    lineHeight: 55,
+    color: "#000",
+  },
   title: { fontSize: 34, fontWeight: "800" },
-  confirmWrap: { flexDirection: "row", alignItems: "center", gap: 6 },
-  confirmText: { fontSize: 14, fontWeight: "700" },
-  chev: { fontSize: 18, color: "#111" },
+  confirmWrap: { flexDirection: "row", alignItems: "center", gap: 6, paddingTop: 9 },
+  confirmText: { fontSize: 18, fontWeight: "700" },
+  chev: { fontSize: 24, color: "#111" },
 
   group: { flexDirection: "row", gap: 20, marginTop: 18 },
   groupBar: { width: 4, borderRadius: 999 },

@@ -20,13 +20,14 @@ export default function SearchBar({
 }
 
 const styles = StyleSheet.create({
-  wrap: { paddingHorizontal: 16 },
+  wrap: { paddingHorizontal: 16, paddingTop: 50, paddingBottom: 80 },
   input: {
     height: 42,
     borderRadius: 18,
     borderWidth: 1,
     borderColor: "#DDD",
     paddingHorizontal: 14,
+    paddingVertical: 10,
     backgroundColor: "#fff",
   },
 });

@@ -11,7 +11,6 @@ export default function Favourites() {
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState<Category>("Mains");
 
-  // For now: pretend favourites = all recipes; later teammate wires backend.
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
     return RECIPES.filter((r) => r.category === category)
@@ -22,10 +21,17 @@ export default function Favourites() {
     <View style={styles.container}>
       <ScreenHeader title="My favourite recipes" />
 
-      <SearchBar value={query} onChange={setQuery} />
+      <View style={styles.searchWrapper}>
+        <SearchBar value={query} onChange={setQuery} />
+      </View>
+
       <CategoryTabs categories={CATEGORIES} active={category} onChange={setCategory} />
 
-      <ScrollView showsVerticalScrollIndicator contentContainerStyle={{ paddingBottom: 24 }}>
+      <ScrollView 
+        showsVerticalScrollIndicator={false}
+        style={styles.recipeScroll}
+        contentContainerStyle={{ paddingBottom: 24 }}
+      >
         {filtered.map((r) => (
           <RecipeCardRow
             key={r.id}
@@ -40,5 +46,16 @@ export default function Favourites() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#fff", paddingTop: 16 },
+  container: { 
+    flex: 1, 
+    backgroundColor: "#fff", 
+    paddingTop: 50 
+  },
+  searchWrapper: {
+    marginTop: 12,
+  },
+  recipeScroll: {
+    flex: 1,
+    marginTop: 12,
+  }
 });

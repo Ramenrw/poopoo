@@ -1,13 +1,13 @@
-export type Category = "Mains" | "Soups" | "Dessert" | "Snacks";
+export type Category = "Mains" | "Soups" | "Salads" | "Sides" | "Dessert" | "Snacks";
 
 export type Recipe = {
   id: string;
   title: string;
   category: Category;
-  thumbnail?: any; // require(...)
+  thumbnail?: any; 
 };
 
-export const CATEGORIES: Category[] = ["Mains", "Soups", "Dessert", "Snacks"];
+export const CATEGORIES: Category[] = ["Mains", "Soups", "Salads", "Sides", "Dessert", "Snacks"];
 
 export const RECIPES: Recipe[] = [
   {
@@ -37,7 +37,7 @@ export const RECIPES: Recipe[] = [
   {
     id: "r5",
     title: "Garlic gochujang tomatoes",
-    category: "Snacks",
+    category: "Sides",
     thumbnail: require("../../assets/images/feed/thumb-garlic-gochujang-tomato.png"),
   },
 ];

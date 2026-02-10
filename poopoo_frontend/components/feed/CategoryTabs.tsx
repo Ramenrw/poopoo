@@ -10,8 +10,12 @@ export default function CategoryTabs<T extends string>({
   onChange: (c: T) => void;
 }) {
   return (
-    <ScrollView horizontal showsHorizontalScrollIndicator style={{ marginTop: 10 }}>
-      <View style={{ width: 16 }} />
+    <ScrollView 
+      horizontal 
+      showsHorizontalScrollIndicator={false} 
+      style={styles.container}
+      contentContainerStyle={{ paddingHorizontal: 16 }}
+    >
       {categories.map((c) => {
         const selected = c === active;
         return (
@@ -24,22 +28,27 @@ export default function CategoryTabs<T extends string>({
           </Pressable>
         );
       })}
-      <View style={{ width: 16 }} />
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    marginTop: 20,
+    marginBottom: 12,
+    flexGrow: 0,  // Important: prevents extra space
+  },
   tab: {
-    paddingVertical: 8,
+    paddingVertical: 12,
     paddingHorizontal: 16,
     borderRadius: 10,
     borderWidth: 1,
     borderColor: "#DDD",
     marginRight: 10,
     backgroundColor: "#fff",
+    height: 49,
   },
   active: { backgroundColor: "#84BFFA", borderColor: "#84BFFA" },
-  text: { fontSize: 12, color: "#000" },
+  text: { fontSize: 15, color: "#000" },
   textActive: { color: "#fff", fontWeight: "600" },
 });
