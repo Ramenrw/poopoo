@@ -1,5 +1,4 @@
-# poopoo
-poop
+# Motto
 
 # How to run (locally)
 1. cd to backend
